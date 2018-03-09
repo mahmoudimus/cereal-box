@@ -8,8 +8,9 @@ exports.encodeText = string => new Uint8Array(
 exports.decodeText = u8 => {
     var data = new Uint16Array(u8.byteLength / 2);
     for (var i = 0, j = 0; j < u8.byteLength; i++, j+=2) {
-        data[i] = u8.buffer[j + 1] | u8.buffer[j] << 8;
+         data[i] = u8[j + 1] | u8[j] << 8;
     }
+//    console.log(data);
     return String.fromCharCode.apply(null, data);
-    //   String.fromCharCode(...(new Uint16Array(u8.buffer, u8.byteOffset, u8.byteLength / 2)));
+    //String.fromCharCode(...(new Uint16Array(u8.buffer, u8.byteOffset, u8.byteLength / 2)));
 }
