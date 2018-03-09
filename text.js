@@ -22,5 +22,5 @@ var getUint8Part = function (buffer, byteOffset, length, bytesPerInteger) {
 exports.decodeText = u8 => {
     console.log('executing this code');
     var dstU8buffer = getUint8Part(u8.buffer, u8.byteOffset, u8.byteLength, 2);
-    return String.fromCharCode(...(new Uint16Array(dstU8buffer, 0, length)));
+    return String.fromCharCode(...(new Uint16Array(dstU8buffer, 0, dstU8buffer.byteLength)));
 };
