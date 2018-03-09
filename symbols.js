@@ -1,4 +1,4 @@
-exports.uint = new Symbol();
-exports.string = new Symbol();
-exports.json = new Symbol();
-exports.u8 = new Symbol();
+exports.uint = Symbol();
+exports.string = Symbol();
+exports.json = Symbol();
+exports.u8 = Symbol();
