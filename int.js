@@ -6,7 +6,7 @@ exports.encodeInt = int => {
 
 exports.decodeInt = u8 => {
   let u32;
-	if ((u8.byteOffset % Uint32Array.BYTES_PER_ELEMENT) !== 0) {
+  if ((u8.byteOffset % Uint32Array.BYTES_PER_ELEMENT) !== 0) {
     u32 = new Uint32Array(u8.buffer.slice(
       u8.byteOffset,
       u8.byteOffset + Uint32Array.BYTES_PER_ELEMENT
@@ -14,7 +14,5 @@ exports.decodeInt = u8 => {
   } else {
     u32 = new Uint32Array(u8.buffer, u8.byteOffset, 1);
   }
-	return u32[0];
-  /*const u32 = new Uint32Array(u8.buffer, u8.byteOffset, 1);
-  return u32[0];*/
+  return u32[0];
 };

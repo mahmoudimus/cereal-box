@@ -1,7 +1,7 @@
 const { encodeText, decodeText } = require("./text");
-const { encodeInt, decodeInt } = require("./int");
+const { encodeInt, decodeInt }   = require("./int");
 const { uint, string, json, u8 } = require("./symbols");
-
+const qs                         = require('querystring');
 
 // Uint32Arrays must have a byte-offset divisible by 4.
 const bump = offset => {
@@ -69,7 +69,17 @@ const getTypedUnpacker = types => {
   const transformers = types.map(t => {
     if (t === uint) { return decodeInt; }
     if (t === string) { return decodeText; }
-    if (t === json) { return arr => JSON.parse(decodeText(arr)); }
+    if (t === json) { return arr => {
+      var array2Text = decodeText(arr);
+      let unpackedStr;
+      try {
+         unpackedStr = JSON.parse(array2Text);
+      }catch(err) {
+        // it is possible that we return json that's already parsed
+        // this solves the issue
+      }
+      return qs.escape(unpackedStr);
+    };}
     if (t === u8) { return ident; }
     if (typeof t === "object") {
       if (Object.getPrototypeOf(t) !== Object.prototype) {
