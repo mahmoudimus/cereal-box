@@ -20,6 +20,7 @@ var getUint8Part = function (buffer, byteOffset, length, bytesPerInteger) {
 // but the intended length of the u16 array.  Because each element in a u16 array consumes two bytes,
 // the byte-length must be divided by two.
 exports.decodeText = u8 => {
+    console.log('executing this code');
     var dstU8buffer = getUint8Part(u8.buffer, u8.byteOffset, u8.byteLength, 2);
     return String.fromCharCode(...(new Uint16Array(dstU8buffer, 0, length)));
 };
