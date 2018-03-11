@@ -51,7 +51,10 @@ const getTypedPacker = types => {
   const transformers = types.map(t => {
     if (t === uint) { return encodeInt; }
     if (t === string) { return encodeText; }
-    if (t === json) { return obj => encodeText(JSON.stringify(obj)); }
+    if (t === json) { return obj => {
+      let asJson = JSON.stringify(obj);
+      return encodeText(asJson);
+    }; }
     if (t === u8) { return ident; }
     if (typeof t === "object") {
       if (Object.getPrototypeOf(t) !== Object.prototype) {
@@ -70,16 +73,22 @@ const getTypedUnpacker = types => {
     if (t === uint) { return decodeInt; }
     if (t === string) { return decodeText; }
     if (t === json) { return arr => {
-      var array2Text = decodeText(arr);
-      let unpackedStr;
-      try {
-         unpackedStr = JSON.parse(array2Text);
-      }catch(err) {
-        // it is possible that we return json that's already parsed
-        // this solves the issue
-      }
-      return qs.escape(unpackedStr);
-    };}
+        const decodedArr = decodeText(arr);
+        let decodedObj;
+        try {
+          decodedObj = JSON.parse(decodedArr);
+        }catch(err) {
+          // it is possible that we return json that's already parsed
+          // this solves the issue
+        }
+        // we should escape if the result of the json unpack is a string
+        // honestly, this should never happen.
+        if(typeof decodedObj === 'string' || decodedObj instanceof String) {
+          decodedObj = qs.escape(decodedObj);
+        }
+        return decodedObj;
+      };
+    }
     if (t === u8) { return ident; }
     if (typeof t === "object") {
       if (Object.getPrototypeOf(t) !== Object.prototype) {
